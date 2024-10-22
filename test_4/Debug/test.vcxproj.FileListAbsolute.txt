@@ -1,0 +1,3 @@
+D:\Прога\Lab 2\test\Debug\test.exe
+D:\Прога\Lab 2\test_4\Debug\test.exe
+C:\Oleg\LOAIZ\Lab2\test_4\Debug\test.exe
