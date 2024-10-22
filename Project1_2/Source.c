@@ -4,96 +4,102 @@
 #include <conio.h>
 #include <windows.h>
 
-#define SIZE 1000
+
 int main(void)
 {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
     setvbuf(stdin, NULL, _IONBF, 0);
     setvbuf(stdout, NULL, _IONBF, 0);
-
-    clock_t start, end;
-    double cpu_time_used;
-    int** a = (int**)malloc(SIZE * sizeof(int*));
-    int** b = (int**)malloc(SIZE * sizeof(int*));
-    int** c = (int**)malloc(SIZE * sizeof(int*));
     
-    if (a == NULL || b == NULL || c == NULL) {
-        printf("Ошибка выделения памяти!\n");
-        return 1;
-    }
-    int i = 0, j = 0, r;
-    int helping = 1000;
-    int elem_c;
-    for (int i = 0; i < SIZE; i++) {
-        a[i] = (int*)malloc(SIZE * sizeof(int));
-        b[i] = (int*)malloc(SIZE * sizeof(int));
-        c[i] = (int*)malloc(SIZE * sizeof(int));
-    }
-    if (a[i] == NULL || b[i] == NULL || c[i] == NULL) {
-        printf("Ошибка выделения памяти в строке %d!\n", i);
-        return 1;
-    }
+    int size_m[] = {100, 200, 400, 1000, 2000, 4000, 10000};
+    size_t count = sizeof(size_m) / sizeof(size_m[0]);
 
-    long long op_count = 0; // счётчик операций
-    start = clock();
-    srand(time(NULL));
-    while (i < helping)
+    for (size_t m = 0; m < count; m++)
     {
-        j = 0;
-        while (j < helping)
-        {
-            a[i][j] = rand() % 100 + 1;
-            j++;
-            op_count++; // одна операция присвоения
+        clock_t start, end;
+        double cpu_time_used;
+        int** a = (int**)malloc(size_m[m] * sizeof(int*));
+        int** b = (int**)malloc(size_m[m] * sizeof(int*));
+        int** c = (int**)malloc(size_m[m] * sizeof(int*));
+
+        if (a == NULL || b == NULL || c == NULL) {
+            printf("Ошибка выделения памяти!\n");
+            return 1;
         }
-        i++;
-    }
 
-    srand(time(NULL));
-    i = 0;
-    j = 0;
-    while (i < helping)
-    {
-        j = 0;
-        while (j < helping)
-        {
-            b[i][j] = rand() % 100 + 1;
-            j++;
-            op_count++; // одна операция присвоения
+        int i = 0, j = 0, r;
+        int elem_c;
+
+        for (int i = 0; i < size_m[m]; i++) {
+            a[i] = (int*)malloc(size_m[m] * sizeof(int));
+            b[i] = (int*)malloc(size_m[m] * sizeof(int));
+            c[i] = (int*)malloc(size_m[m] * sizeof(int));
         }
-        i++;
-    }
+        if (a[i] == NULL || b[i] == NULL || c[i] == NULL) {
+            printf("Ошибка выделения памяти в строке %d!\n", i);
+            return 1;
+        }
 
-    // Умножение матриц
-    for (i = 0; i < helping; i++)
-    {
-        for (j = 0; j < helping; j++)
+        long long op_count = 0; // счётчик операций
+        int cycle = size_m[m];
+
+        srand(time(NULL));
+        while (i < cycle)
         {
-            elem_c = 0;
-            for (r = 0; r < helping; r++)
+            j = 0;
+            while (j < cycle)
             {
-                elem_c = elem_c + a[i][r] * b[r][j];
-                c[i][j] = elem_c;
-                op_count += 3; // одна операция сложения, умножения и присвоения
+                a[i][j] = 1 + rand() % 100;
+                j++;
+                op_count++; // одна операция присвоения
+            }
+            i++;
+        }
+
+        srand(time(NULL));
+        i = 0;
+        j = 0;
+        while (i < cycle)
+        {
+            j = 0;
+            while (j < cycle)
+            {
+                b[i][j] = 1 + rand() % 100;
+                j++;
+                op_count++; // одна операция присвоения
+            }
+            i++;
+        }
+        start = clock();
+        // Умножение матриц
+        for (i = 0; i < cycle; i++)
+        {
+            for (j = 0; j < cycle; j++)
+            {
+                elem_c = 0;
+                for (r = 0; r < cycle; r++)
+                {
+                    elem_c = elem_c + a[i][r] * b[r][j];
+                    c[i][j] = elem_c;
+                    op_count += 3; // одна операция сложения, умножения и присвоения
+                }
             }
         }
+        end = clock();
+        for (int i = 0; i < count; i++) {
+            free(a[i]);
+            free(b[i]);
+            free(c[i]);
+        }
+        free(a);
+        free(b);
+        free(c);
+
+        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+        printf("Время выполнения программы: %f секунд\n", cpu_time_used);
+        printf("Кол-во операций: %lld\n", op_count);
     }
-
-    for (int i = 0; i < SIZE; i++) {
-        free(a[i]);
-        free(b[i]);
-        free(c[i]);
-    }
-    free(a);
-    free(b);
-    free(c);
-
-    end = clock();
-    cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-    printf("Время выполнения программы: %f секунд\n", cpu_time_used);
-    printf("Кол-во операций: %lld\n", op_count);
-
     return 0;
 }

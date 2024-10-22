@@ -1,4 +1,5 @@
 ﻿  Source.c
-C:\Oleg\LOAIZ\Lab2\Project1_2\Source.c(40,11): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
-C:\Oleg\LOAIZ\Lab2\Project1_2\Source.c(53,11): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Oleg\LOAIZ\Lab2\Project1_2\Source.c(47,15): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Oleg\LOAIZ\Lab2\Project1_2\Source.c(60,15): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Oleg\LOAIZ\Lab2\Project1_2\Source.c(90,27): warning C4018: <: несоответствие типов со знаком и без знака
   Project1_2.vcxproj -> C:\Oleg\LOAIZ\Lab2\Project1_2\Debug\Project1_2.exe
